@@ -10,4 +10,4 @@ Copy plugin for `initx`
 
 ## Documentation
 
-[initx](https://github.com/imba97/initx)
+[initx](https://github.com/initx-collective/initx)
