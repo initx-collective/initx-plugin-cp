@@ -8,6 +8,20 @@
 
 Copy plugin for `initx`
 
+## Usage
+
+```bash
+npm install @initx-plugin/cp -g
+```
+
+Copy some text to clipboard
+
+### SSH Public Key
+
+```bash
+npx initx cp ssh
+```
+
 ## Documentation
 
 [initx](https://github.com/initx-collective/initx)
