@@ -18,7 +18,6 @@ export default class CpHandler extends InitxHandler {
   ]
 
   async handle(_ctx: InitxCtx, cpType: CpType, ...others: string[]) {
-    console.log('cp', cpType)
     if (!cpType || typeof this[cpType] !== 'function') {
       const typeList = CpType as Record<string, string>
       log.error(`Please enter the copy type, Available types: ${Object.keys(typeList).map(key => typeList[key])}`)
