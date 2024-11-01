@@ -1,11 +1,11 @@
 import os from 'node:os'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { resolve as pathResolve } from 'node:path'
 
 import clipboard from 'clipboardy'
 
 import { type InitxCtx, InitxHandler } from '@initx-plugin/core'
-import { log } from '@initx-plugin/utils'
+import { inquirer, log } from '@initx-plugin/utils'
 
 import { CpType } from './types'
 
@@ -18,6 +18,7 @@ export default class CpHandler extends InitxHandler {
   ]
 
   async handle(_ctx: InitxCtx, cpType: CpType, ...others: string[]) {
+    console.log('cp', cpType)
     if (!cpType || typeof this[cpType] !== 'function') {
       const typeList = CpType as Record<string, string>
       log.error(`Please enter the copy type, Available types: ${Object.keys(typeList).map(key => typeList[key])}`)
@@ -29,17 +30,35 @@ export default class CpHandler extends InitxHandler {
 
   async [CpType.SSH]() {
     const sshDir = pathResolve(os.homedir(), '.ssh')
-    const publicKeyPath = pathResolve(sshDir, 'id_rsa.pub')
 
-    if (!existsSync(publicKeyPath)) {
-      log.error(`SSH key not found, path: ${publicKeyPath}`)
+    if (!existsSync(sshDir)) {
+      log.error(`SSH directory not found, path: ${sshDir}`)
       return
     }
 
-    const publicKey = readFileSync(publicKeyPath, 'utf8')
-    this.copy(publicKey)
+    const publicKeysName = readdirSync(sshDir).filter(file => file.endsWith('.pub'))
 
-    log.success('Public key copied to clipboard')
+    if (publicKeysName.length === 0) {
+      log.error('SSH key not found')
+      return
+    }
+
+    let publicKeyName: string
+
+    if (publicKeysName.length === 1) {
+      const [firstKey] = publicKeysName
+      publicKeyName = firstKey
+    }
+    else {
+      const index = await inquirer.select('Select SSH key', publicKeysName)
+      publicKeyName = publicKeysName[index]
+    }
+
+    const publicKeyPath = pathResolve(sshDir, publicKeyName)
+    const publicKey = readFileSync(publicKeyPath, 'utf8')
+
+    this.copy(publicKey)
+    log.success('Key copied to clipboard')
   }
 
   private copy(content: string) {
