@@ -4,12 +4,12 @@ import { resolve as pathResolve } from 'node:path'
 
 import clipboard from 'clipboardy'
 
-import { type InitxCtx, InitxHandler } from '@initx-plugin/core'
+import { type InitxContext, InitxPlugin } from '@initx-plugin/core'
 import { inquirer, log } from '@initx-plugin/utils'
 
 import { CpType } from './types'
 
-export default class CpHandler extends InitxHandler {
+export default class CpHandler extends InitxPlugin {
   matchers = [
     {
       matching: 'cp',
@@ -17,7 +17,7 @@ export default class CpHandler extends InitxHandler {
     }
   ]
 
-  async handle(_ctx: InitxCtx, cpType: CpType, ...others: string[]) {
+  async handle(_ctx: InitxContext, cpType: CpType, ...others: string[]) {
     if (!cpType || typeof this[cpType] !== 'function') {
       const typeList = CpType as Record<string, string>
       log.error(`Please enter the copy type, Available types: ${Object.keys(typeList).map(key => typeList[key])}`)
