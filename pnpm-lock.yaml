@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@initx-plugin/core':
-        specifier: latest
-        version: 0.0.20(@types/node@22.9.0)
+        specifier: ^0.0.21
+        version: 0.0.21(@types/node@22.9.0)
       '@initx-plugin/utils':
-        specifier: latest
-        version: 0.0.20(@types/node@22.9.0)
+        specifier: ^0.0.21
+        version: 0.0.21(@types/node@22.9.0)
       clipboardy:
         specifier: ^4.0.0
         version: 4.0.0
@@ -814,11 +814,11 @@ packages:
   '@imba97/eslint-config@0.0.4':
     resolution: {integrity: sha512-wkUUnmrtZrUcZotzg2WCPvduWIIfZ/A/Ao6pRH028MmPXQL+CVSRM97ZtCkJDAPvBAp1599Y3M4BugZcNMnKoQ==}
 
-  '@initx-plugin/core@0.0.20':
-    resolution: {integrity: sha512-DhAunNMJsUiZfbg5GqAg7B4CBMgPQ8irGp24WC1Ab5qv98laYVk6RlLf+tifYrIm5sW8vrZjlHQWqfAbUfOU6g==}
+  '@initx-plugin/core@0.0.21':
+    resolution: {integrity: sha512-C9GjhI6ltFr2+5uOpaL5MwoVuWMPWx5QctrgpZ28EEXNS2BgX/lVedyytJ2aFfnY9QZAss5kjVO1Z0lwghOwHg==}
 
-  '@initx-plugin/utils@0.0.20':
-    resolution: {integrity: sha512-afsFddQmvT5OhPRvESYYUteL/u5dlR4eYwRCKN2OyDrJkp2NPiReMOLJPOQrnMxpXpFZMEz4iXGpv6RQiIeE7g==}
+  '@initx-plugin/utils@0.0.21':
+    resolution: {integrity: sha512-kIR7o9kKi8t8cAj0MOo50zQc1qM2kwYalo5gPAzYyD9EHU9bMwVnltueJxKoItl+cdeYBOp1rEnfREpPFOsiuQ==}
 
   '@inquirer/checkbox@4.0.1':
     resolution: {integrity: sha512-ehJjmNPdguajc1hStvjN7DJNVjwG5LC1mgGMGFjCmdkn2fxB2GtULftMnlaqNmvMdPpqdaSoOFpl86VkLtG4pQ==}
@@ -3773,9 +3773,9 @@ snapshots:
       - typescript
       - vitest
 
-  '@initx-plugin/core@0.0.20(@types/node@22.9.0)':
+  '@initx-plugin/core@0.0.21(@types/node@22.9.0)':
     dependencies:
-      '@initx-plugin/utils': 0.0.20(@types/node@22.9.0)
+      '@initx-plugin/utils': 0.0.21(@types/node@22.9.0)
       defu: 6.1.4
       fs-extra: 11.2.0
       importx: 0.5.0
@@ -3783,7 +3783,7 @@ snapshots:
       - '@types/node'
       - supports-color
 
-  '@initx-plugin/utils@0.0.20(@types/node@22.9.0)':
+  '@initx-plugin/utils@0.0.21(@types/node@22.9.0)':
     dependencies:
       inquirer: 12.0.1(@types/node@22.9.0)
       picocolors: 1.1.1
