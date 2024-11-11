@@ -32,8 +32,8 @@
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
-    "@initx-plugin/core": "^0.0.21",
-    "@initx-plugin/utils": "^0.0.21",
+    "@initx-plugin/core": "^0.0.22",
+    "@initx-plugin/utils": "^0.0.22",
     "clipboardy": "^4.0.0"
   },
   "devDependencies": {
