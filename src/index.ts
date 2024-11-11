@@ -9,7 +9,7 @@ import { inquirer, log } from '@initx-plugin/utils'
 
 import { CpType } from './types'
 
-export default class CpHandler extends InitxPlugin {
+export default class CpPlugin extends InitxPlugin {
   matchers = [
     {
       matching: 'cp',
