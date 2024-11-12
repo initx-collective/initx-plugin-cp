@@ -1,3 +1,4 @@
 export enum CpType {
-  SSH = 'ssh'
+  SSH = 'ssh',
+  CWD = 'cwd'
 }

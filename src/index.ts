@@ -1,4 +1,5 @@
 import os from 'node:os'
+import { cwd } from 'node:process'
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { resolve as pathResolve } from 'node:path'
 
@@ -58,6 +59,11 @@ export default class CpPlugin extends InitxPlugin {
 
     this.copy(publicKey)
     log.success('Key copied to clipboard')
+  }
+
+  async [CpType.CWD]() {
+    this.copy(cwd())
+    log.success('Current working directory copied to clipboard')
   }
 
   private copy(content: string) {
