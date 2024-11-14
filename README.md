@@ -16,6 +16,12 @@ npm install @initx-plugin/cp -g
 
 Copy some text to clipboard
 
+### Current Working Directory
+
+```bash
+npx initx cp cwd
+```
+
 ### SSH Public Key
 
 ```bash
