@@ -28,6 +28,12 @@ npx initx cp cwd
 npx initx cp ssh
 ```
 
+### GPG Public Key
+
+```bash
+npx initx cp gpg
+```
+
 ## Documentation
 
 [initx](https://github.com/initx-collective/initx)
