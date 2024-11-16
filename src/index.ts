@@ -6,7 +6,7 @@ import { resolve as pathResolve } from 'node:path'
 import clipboard from 'clipboardy'
 
 import { type InitxContext, InitxPlugin } from '@initx-plugin/core'
-import { inquirer, log } from '@initx-plugin/utils'
+import { c, gpgList, inquirer, log } from '@initx-plugin/utils'
 
 import { CpType } from './types'
 
@@ -59,6 +59,28 @@ export default class CpPlugin extends InitxPlugin {
 
     this.copy(publicKey)
     log.success('Key copied to clipboard')
+  }
+
+  async [CpType.GPG]() {
+    const list = await gpgList()
+
+    if (list.length === 0) {
+      log.error('No GPG keys found')
+      return
+    }
+
+    let index = 0
+
+    if (list.length > 1) {
+      index = await inquirer.select('Select GPG key', list.map(({ key, name, email }) => `${key} - ${name} <${email}>`))
+    }
+
+    const { key } = list[index]
+
+    const result = await c('gpg', ['--armor', '--export', key])
+
+    this.copy(result.content)
+    log.success('GPG public key copied to clipboard')
   }
 
   async [CpType.CWD]() {
