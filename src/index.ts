@@ -1,12 +1,12 @@
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import os from 'node:os'
-import { cwd } from 'node:process'
-import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { resolve as pathResolve } from 'node:path'
-
-import clipboard from 'clipboardy'
+import { cwd } from 'node:process'
 
 import { type InitxContext, InitxPlugin } from '@initx-plugin/core'
 import { c, gpgList, inquirer, log } from '@initx-plugin/utils'
+
+import clipboard from 'clipboardy'
 
 import { CpType } from './types'
 
