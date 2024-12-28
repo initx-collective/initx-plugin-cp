@@ -2,7 +2,7 @@
   "name": "@initx-plugin/cp",
   "type": "module",
   "version": "0.0.18",
-  "packageManager": "pnpm@9.14.2",
+  "packageManager": "pnpm@9.15.1",
   "description": "initx plugin, copy some text to clipboard",
   "author": "imba97",
   "license": "MIT",
@@ -32,20 +32,20 @@
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
-    "@initx-plugin/core": "^0.0.25",
-    "@initx-plugin/utils": "^0.0.25",
+    "@initx-plugin/core": "^0.0.27",
+    "@initx-plugin/utils": "^0.0.27",
     "clipboardy": "^4.0.0"
   },
   "devDependencies": {
     "@imba97/eslint-config": "^0.0.5",
-    "@types/node": "^22.9.1",
-    "bumpp": "^9.8.1",
-    "eslint": "^9.15.0",
-    "lint-staged": "^15.2.10",
+    "@types/node": "^22.10.2",
+    "bumpp": "^9.9.2",
+    "eslint": "^9.17.0",
+    "lint-staged": "^15.3.0",
     "simple-git-hooks": "^2.11.1",
-    "typescript": "5.5.4",
-    "unbuild": "^2.0.0",
-    "vitest": "^2.1.5"
+    "typescript": "^5.7.2",
+    "unbuild": "^3.1.0",
+    "vitest": "^2.1.8"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
