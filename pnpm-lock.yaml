@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@initx-plugin/core':
-        specifier: ^0.0.27
-        version: 0.0.27(@types/node@22.10.2)
+        specifier: ^0.0.28
+        version: 0.0.28(@types/node@22.10.2)
       '@initx-plugin/utils':
-        specifier: ^0.0.27
-        version: 0.0.27(@types/node@22.10.2)
+        specifier: ^0.0.28
+        version: 0.0.28(@types/node@22.10.2)
       clipboardy:
         specifier: ^4.0.0
         version: 4.0.0
@@ -689,11 +689,11 @@ packages:
   '@imba97/eslint-config@0.0.5':
     resolution: {integrity: sha512-2+wDx6biapNoTsUHAYM0VoWP4pLXVfyf0UfF5jtUARoNsVvdwr6kxZhUjN2K/wSG/H25IWLvMqzx+kHjOAchiw==}
 
-  '@initx-plugin/core@0.0.27':
-    resolution: {integrity: sha512-zSaTxuhFBU33cq2ec+WkWZ/cCg+JZaHALyEQuw14c+weayPZIt52yHZR+xIb5M9VhwmkZNQaLpeOxoFPVH6muQ==}
+  '@initx-plugin/core@0.0.28':
+    resolution: {integrity: sha512-uC5Uchj92HieCD9pNIpDUxkRPD5crbLh/ahaI0/Orr7P68bWDhHyP5wkbW2ULDIj7gtHlWXe7/I6jTNYp7RQ3A==}
 
-  '@initx-plugin/utils@0.0.27':
-    resolution: {integrity: sha512-tfEI0nrTP6u66SSr9Om/aelueVeyuJR4aVMA/0hJFgCeNeZ8UV9IM2MW/ICLLK9RwQNQkzCy6fJigfzy6WPiWw==}
+  '@initx-plugin/utils@0.0.28':
+    resolution: {integrity: sha512-LB8vJqOB6lAcMyBYn1YXARcWtmr7RF7idLUprTrwsdfwhbsctgtoNPCTkKV/zpx5ePrrNr+DkR/NsUYo6601CA==}
 
   '@inquirer/checkbox@4.0.4':
     resolution: {integrity: sha512-fYAKCAcGNMdfjL6hZTRUwkIByQ8EIZCXKrIQZH7XjADnN/xvRUhj8UdBbpC4zoUzvChhkSC/zRKaP/tDs3dZpg==}
@@ -2105,6 +2105,9 @@ packages:
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
 
+  matchinitx@0.0.2:
+    resolution: {integrity: sha512-sDY7dpxoZ+M7kb2V4zdP3W9Gw3EzR/CkoZkGCN5SYRrfF2Y8Sjte2uZ5RHbUz2ug7P/XZTJoK7Na27m1nW+Xew==}
+
   mdast-util-find-and-replace@3.0.1:
     resolution: {integrity: sha512-SG21kZHGC3XRTSUhtofZkBzZTJNM5ecCi0SK2IMKmSXR8vO3peL+kb1O0z7Zl83jKtutG4k5Wv/W7V3/YHvzPA==}
 
@@ -2897,6 +2900,9 @@ packages:
   tinyexec@0.3.1:
     resolution: {integrity: sha512-WiCJLEECkO18gwqIp6+hJg0//p23HXp4S+gGtAKu3mI2F2/sXC4FvHvXvB0zJVVaTPhx1/tOwdbRsa1sOBIKqQ==}
 
+  tinyexec@0.3.2:
+    resolution: {integrity: sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==}
+
   tinyglobby@0.2.10:
     resolution: {integrity: sha512-Zc+8eJlFMvgatPZTl6A9L/yht8QqdmUNtURHaKZLmKBE12hNPSrqNkUp2cs3M/UKmNVVAMFQYSjYIVHDjW5zew==}
     engines: {node: '>=12.0.0'}
@@ -3646,22 +3652,23 @@ snapshots:
       - typescript
       - vitest
 
-  '@initx-plugin/core@0.0.27(@types/node@22.10.2)':
+  '@initx-plugin/core@0.0.28(@types/node@22.10.2)':
     dependencies:
-      '@initx-plugin/utils': 0.0.27(@types/node@22.10.2)
+      '@initx-plugin/utils': 0.0.28(@types/node@22.10.2)
       defu: 6.1.4
       fs-extra: 11.2.0
       importx: 0.5.1
+      matchinitx: 0.0.2
     transitivePeerDependencies:
       - '@types/node'
       - supports-color
 
-  '@initx-plugin/utils@0.0.27(@types/node@22.10.2)':
+  '@initx-plugin/utils@0.0.28(@types/node@22.10.2)':
     dependencies:
       inquirer: 12.3.0(@types/node@22.10.2)
       ora: 8.1.1
       picocolors: 1.1.1
-      tinyexec: 0.3.1
+      tinyexec: 0.3.2
       which: 5.0.0
     transitivePeerDependencies:
       - '@types/node'
@@ -5224,6 +5231,8 @@ snapshots:
 
   markdown-table@3.0.4: {}
 
+  matchinitx@0.0.2: {}
+
   mdast-util-find-and-replace@3.0.1:
     dependencies:
       '@types/mdast': 4.0.4
@@ -6155,6 +6164,8 @@ snapshots:
   tinybench@2.9.0: {}
 
   tinyexec@0.3.1: {}
+
+  tinyexec@0.3.2: {}
 
   tinyglobby@0.2.10:
     dependencies:

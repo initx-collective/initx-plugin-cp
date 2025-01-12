@@ -11,7 +11,7 @@ import clipboard from 'clipboardy'
 import { CpType } from './types'
 
 export default class CpPlugin extends InitxPlugin {
-  matchers = [
+  rules = [
     {
       matching: 'cp',
       description: 'Copy SSH public key'
