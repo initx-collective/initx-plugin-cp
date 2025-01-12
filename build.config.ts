@@ -5,6 +5,9 @@ export default defineBuildConfig({
     'src/index'
   ],
   rollup: {
+    esbuild: {
+      minify: true
+    },
     inlineDependencies: true,
     json: {
       compact: true,
