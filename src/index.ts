@@ -3,7 +3,7 @@ import os from 'node:os'
 import { resolve as pathResolve } from 'node:path'
 import { cwd } from 'node:process'
 
-import { type InitxContext, InitxPlugin } from '@initx-plugin/core'
+import { type InitxContext, type InitxMatcherRules, InitxPlugin } from '@initx-plugin/core'
 import { c, gpgList, inquirer, log } from '@initx-plugin/utils'
 
 import clipboard from 'clipboardy'
@@ -11,7 +11,7 @@ import clipboard from 'clipboardy'
 import { CpType } from './types'
 
 export default class CpPlugin extends InitxPlugin {
-  rules = [
+  rules: InitxMatcherRules = [
     {
       matching: 'cp',
       description: 'Copy SSH public key'
