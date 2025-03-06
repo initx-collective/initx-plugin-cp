@@ -11,5 +11,3 @@
 .history
 node_modules
 dist
-
-eslint.config.js
