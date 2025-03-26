@@ -18,14 +18,14 @@ export default class CpPlugin extends InitxPlugin {
     }
   ]
 
-  async handle(_ctx: InitxContext, cpType: CpType, ...others: string[]) {
+  async handle(_ctx: InitxContext, cpType: CpType) {
     if (!cpType || typeof this[cpType] !== 'function') {
       const typeList = CpType as Record<string, string>
-      log.error(`Please enter the copy type, Available types: ${Object.keys(typeList).map(key => typeList[key])}`)
+      log.error(`Please enter the copy type, Available types: ${Object.keys(typeList).map(key => typeList[key]).join(', ')}`)
       return
     }
 
-    ; (this[cpType] as (...args: string[]) => void)(...others)
+    await this[cpType]()
   }
 
   async [CpType.SSH]() {
