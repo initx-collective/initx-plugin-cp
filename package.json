@@ -1,7 +1,7 @@
 {
   "name": "@initx-plugin/cp",
   "type": "module",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "packageManager": "pnpm@10.6.5",
   "description": "initx plugin, copy some text to clipboard",
   "author": "imba97",
