@@ -11,7 +11,7 @@ Copy plugin for `initx`
 ## Usage
 
 ```bash
-npm install @initx-plugin/cp -g
+npx initx plugin add cp
 ```
 
 Copy some text to clipboard
