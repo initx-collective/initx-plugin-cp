@@ -31,13 +31,17 @@
     "release": "bumpp",
     "prepare": "simple-git-hooks"
   },
+  "peerDependencies": {
+    "@initx-plugin/core": "*",
+    "@initx-plugin/utils": "*"
+  },
   "dependencies": {
-    "@initx-plugin/core": "^0.0.31",
-    "@initx-plugin/utils": "^0.0.31",
     "clipboardy": "^4.0.0"
   },
   "devDependencies": {
     "@imba97/eslint-config": "^0.0.6",
+    "@initx-plugin/core": "*",
+    "@initx-plugin/utils": "*",
     "@types/node": "^22.13.13",
     "bumpp": "^10.1.0",
     "eslint": "^9.23.0",
