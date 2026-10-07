@@ -1,6 +1,9 @@
-shellEmulator: true
+minimumReleaseAgeExcludePrune: true
+minimumReleaseAgeExclude:
+  - '@initx-plugin/utils@0.4.2'
 
 trustPolicy: no-downgrade
+shellEmulator: true
 
 allowBuilds:
   esbuild: true

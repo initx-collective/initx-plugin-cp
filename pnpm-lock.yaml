@@ -177,8 +177,8 @@ importers:
         specifier: ^0.4.1
         version: 0.4.1(@types/node@26.6.4)
       '@initx-plugin/utils':
-        specifier: ^0.4.1
-        version: 0.4.1(@types/node@26.6.4)
+        specifier: ^0.4.2
+        version: 0.4.2(@types/node@26.6.4)
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
@@ -195,7 +195,7 @@ importers:
         specifier: ^2.14.0
         version: 2.14.0
       typescript:
-        specifier: ^6.0.3
+        specifier: 6.0.3
         version: 6.0.3
       unbuild:
         specifier: ^3.6.1
@@ -738,6 +738,9 @@ packages:
 
   '@initx-plugin/utils@0.4.1':
     resolution: {integrity: sha512-jIafz53fRk0hX2lOSzdzESwdoazWP991TxoB4MnmYK4eG7IOSuPYssnFWYtQAh11GZYxkgOPDpKjTp7ym+pDVg==}
+
+  '@initx-plugin/utils@0.4.2':
+    resolution: {integrity: sha512-2QV+Hg5AA7LtEBhcpSefiD+/6R74jGUBI4GuJemvopAvQdXn/KzjgdH935cKPI8+cgeaP6XYauUPQDQRBgax8Q==}
 
   '@inquirer/ansi@2.0.9':
     resolution: {integrity: sha512-0Ywt3S8tqM6TWUcsRlBFQ1x+X3/o8kktX0ZiKAnByYb9GFDknnOhse1PVtfiD2BXPI8ar+BWx9PV9R0lQIcygw==}
@@ -3645,6 +3648,15 @@ snapshots:
       - supports-color
 
   '@initx-plugin/utils@0.4.1(@types/node@26.6.4)':
+    dependencies:
+      '@inquirer/prompts': 8.7.3(@types/node@26.6.4)
+      picospinner: 3.1.2
+      tinyexec: 1.3.1
+      which: 7.0.0
+    transitivePeerDependencies:
+      - '@types/node'
+
+  '@initx-plugin/utils@0.4.2(@types/node@26.6.4)':
     dependencies:
       '@inquirer/prompts': 8.7.3(@types/node@26.6.4)
       picospinner: 3.1.2
