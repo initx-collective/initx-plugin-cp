@@ -2,7 +2,7 @@
   "name": "@initx-plugin/cp",
   "type": "module",
   "version": "0.0.24",
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@12.9.1",
   "description": "initx plugin, copy some text to clipboard",
   "author": "imba97",
   "license": "MIT",
@@ -36,20 +36,20 @@
     "@initx-plugin/utils": "*"
   },
   "dependencies": {
-    "clipboardy": "^5.3.1"
+    "clipboardy": "^5.3.2"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^8.0.0",
-    "@initx-plugin/core": "^0.3.3",
-    "@initx-plugin/utils": "^0.3.3",
-    "@types/node": "^25.5.2",
-    "bumpp": "^11.0.1",
-    "eslint": "^10.2.0",
-    "nano-staged": "^0.9.0",
-    "simple-git-hooks": "^2.13.1",
-    "typescript": "^6.0.2",
+    "@antfu/eslint-config": "^9.5.1",
+    "@initx-plugin/core": "^0.4.1",
+    "@initx-plugin/utils": "^0.4.1",
+    "@types/node": "^26.6.4",
+    "bumpp": "^12.3.0",
+    "eslint": "^10.12.0",
+    "nano-staged": "^1.0.2",
+    "simple-git-hooks": "^2.14.0",
+    "typescript": "^6.0.3",
     "unbuild": "^3.6.1",
-    "vitest": "^4.1.2"
+    "vitest": "^5.0.3"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm nano-staged"
