@@ -4,7 +4,7 @@ import os from 'node:os'
 import { resolve as pathResolve } from 'node:path'
 import process, { cwd } from 'node:process'
 import { InitxPlugin } from '@initx-plugin/core'
-import { c, gpgList, inquirer, log } from '@initx-plugin/utils'
+import { c, gpgList, inquirer, loadingFunction, log } from '@initx-plugin/utils'
 
 import clipboard from 'clipboardy'
 
@@ -63,7 +63,7 @@ export default class CpPlugin extends InitxPlugin {
 
   private async runDataCopy(key: string) {
     try {
-      const value = await getDataValue(key)
+      const value = await loadingFunction(`Fetching "${key}"`, () => getDataValue(key))
       if (value === null) {
         log.error(`Data key "${key}" not found. Use \`ix cp-config set ${key} <value>\` to create it.`)
         return
@@ -205,7 +205,7 @@ export default class CpPlugin extends InitxPlugin {
     }
 
     try {
-      await setDataValue(key, value)
+      await loadingFunction(`Saving "${key}" to GitHub`, () => setDataValue(key, value))
       log.success(`Data "${key}" saved`)
     }
     catch (err) {
@@ -231,7 +231,7 @@ export default class CpPlugin extends InitxPlugin {
     }
 
     try {
-      const value = await getDataValue(key)
+      const value = await loadingFunction(`Fetching "${key}" from GitHub`, () => getDataValue(key))
       if (value === null) {
         log.error(`Data key "${key}" not found`)
         return
@@ -246,7 +246,7 @@ export default class CpPlugin extends InitxPlugin {
 
   private async configList() {
     try {
-      const keys = await listDataKeys()
+      const keys = await loadingFunction('Listing data keys', () => listDataKeys())
       if (keys.length === 0) {
         log.info('No data keys configured')
         return
@@ -272,7 +272,7 @@ export default class CpPlugin extends InitxPlugin {
     }
 
     try {
-      await removeDataValue(key)
+      await loadingFunction(`Removing "${key}" from GitHub`, () => removeDataValue(key))
       log.success(`Data "${key}" removed`)
     }
     catch (err) {
