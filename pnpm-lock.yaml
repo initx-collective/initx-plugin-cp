@@ -177,8 +177,8 @@ importers:
         specifier: ^0.4.1
         version: 0.4.1(@types/node@26.6.4)
       '@initx-plugin/utils':
-        specifier: ^0.4.2
-        version: 0.4.2(@types/node@26.6.4)
+        specifier: ^0.4.3
+        version: 0.4.3(@types/node@26.6.4)
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
@@ -739,8 +739,8 @@ packages:
   '@initx-plugin/utils@0.4.1':
     resolution: {integrity: sha512-jIafz53fRk0hX2lOSzdzESwdoazWP991TxoB4MnmYK4eG7IOSuPYssnFWYtQAh11GZYxkgOPDpKjTp7ym+pDVg==}
 
-  '@initx-plugin/utils@0.4.2':
-    resolution: {integrity: sha512-2QV+Hg5AA7LtEBhcpSefiD+/6R74jGUBI4GuJemvopAvQdXn/KzjgdH935cKPI8+cgeaP6XYauUPQDQRBgax8Q==}
+  '@initx-plugin/utils@0.4.3':
+    resolution: {integrity: sha512-H801sxyysudDlr7d7EV7/t5n2e1b6Jklva/UeetjZBGgbUZZNluSTKTb3l38uPm+tGvfA76R+eUvP2uaMXWLrg==}
 
   '@inquirer/ansi@2.0.9':
     resolution: {integrity: sha512-0Ywt3S8tqM6TWUcsRlBFQ1x+X3/o8kktX0ZiKAnByYb9GFDknnOhse1PVtfiD2BXPI8ar+BWx9PV9R0lQIcygw==}
@@ -3656,7 +3656,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@initx-plugin/utils@0.4.2(@types/node@26.6.4)':
+  '@initx-plugin/utils@0.4.3(@types/node@26.6.4)':
     dependencies:
       '@inquirer/prompts': 8.7.3(@types/node@26.6.4)
       picospinner: 3.1.2

@@ -10,6 +10,7 @@ import clipboard from 'clipboardy'
 
 import { clearConfigValue, getConfigValue, loadConfig, setConfigValue } from './config'
 import { getDataValue, listDataKeys, removeDataValue, setDataValue } from './data'
+import { loadRecent, pushRecent, removeRecent } from './recent'
 import { CP_RESERVED_CONFIG_KEYS, CpConfigCommand, CpType } from './types'
 
 const PRESET_TYPES = new Set<string>(Object.values(CpType))
@@ -28,6 +29,10 @@ export default class CpPlugin extends InitxPlugin {
   ]
 
   async handle(ctx: InitxContext, ...args: string[]) {
+    if (ctx.optionsList.includes('--list')) {
+      await this.runList()
+      return
+    }
     if (ctx.key === 'cp-config') {
       await this.handleConfigCommand(args)
       return
@@ -59,6 +64,7 @@ export default class CpPlugin extends InitxPlugin {
       return
     }
     await handler.call(this)
+    pushRecent(cpType)
   }
 
   private async runDataCopy(key: string) {
@@ -70,10 +76,71 @@ export default class CpPlugin extends InitxPlugin {
       }
       this.copy(value)
       log.success(`Data key "${key}" copied to clipboard`)
+      pushRecent(key)
     }
     catch (err) {
       log.error(`Failed to fetch "${key}": ${(err as Error).message}`)
     }
+  }
+
+  private async runList() {
+    if (!process.stdin.isTTY) {
+      log.error('cp --list requires an interactive TTY.')
+      return
+    }
+
+    const presets = Object.values(CpType)
+    let dataKeys: string[] = []
+    try {
+      dataKeys = await loadingFunction('Loading data keys', () => listDataKeys())
+    }
+    catch (err) {
+      log.warn(`Could not load data keys: ${(err as Error).message}`)
+    }
+
+    const available = new Set<string>([...presets, ...dataKeys])
+    const recent = loadRecent().filter(k => available.has(k))
+
+    // Compose the final order:
+    // 1) items from recent (in MRU order)
+    // 2) everything else, alphabetically
+    const seen = new Set<string>()
+    const ordered: string[] = []
+    for (const k of recent) {
+      if (seen.has(k))
+        continue
+      ordered.push(k)
+      seen.add(k)
+    }
+    for (const k of [...dataKeys].sort()) {
+      if (seen.has(k))
+        continue
+      ordered.push(k)
+      seen.add(k)
+    }
+    for (const k of presets) {
+      if (seen.has(k))
+        continue
+      ordered.push(k)
+      seen.add(k)
+    }
+
+    if (ordered.length === 0) {
+      log.warn('No copyable keys found.')
+      return
+    }
+
+    const items = ordered.map((key) => {
+      const isPreset = PRESET_TYPES.has(key)
+      return {
+        name: key,
+        value: key,
+        description: isPreset ? 'preset' : 'data'
+      }
+    })
+
+    const picked = await inquirer.search('Select a key to copy', items)
+    await this.handleCopy([picked])
   }
 
   async [CpType.SSH]() {
@@ -207,6 +274,7 @@ export default class CpPlugin extends InitxPlugin {
     try {
       await loadingFunction(`Saving "${key}" to GitHub`, () => setDataValue(key, value))
       log.success(`Data "${key}" saved`)
+      pushRecent(key)
     }
     catch (err) {
       log.error(`Failed to save data: ${(err as Error).message}`)
@@ -274,6 +342,7 @@ export default class CpPlugin extends InitxPlugin {
     try {
       await loadingFunction(`Removing "${key}" from GitHub`, () => removeDataValue(key))
       log.success(`Data "${key}" removed`)
+      removeRecent(key)
     }
     catch (err) {
       log.error(`Failed to remove data: ${(err as Error).message}`)
