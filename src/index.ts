@@ -6,7 +6,7 @@ import process, { cwd } from 'node:process'
 import { InitxPlugin } from '@initx-plugin/core'
 import { c, gpgList, inquirer, loadingFunction, log } from '@initx-plugin/utils'
 
-import clipboard from 'clipboardy'
+import { writeText } from 'tinyclip'
 
 import { clearConfigValue, getConfigValue, loadConfig, setConfigValue } from './config'
 import { getDataValue, listDataKeys, removeDataValue, renameDataValue, setDataValue } from './data'
@@ -74,7 +74,7 @@ export default class CpPlugin extends InitxPlugin {
         log.error(`Data key "${key}" not found. Use \`ix cp-config set ${key} <value>\` to create it.`)
         return
       }
-      this.copy(value)
+      await this.copy(value)
       log.success(`Data key "${key}" copied to clipboard`)
       pushRecent(key)
     }
@@ -172,7 +172,7 @@ export default class CpPlugin extends InitxPlugin {
     const publicKeyPath = pathResolve(sshDir, publicKeyName)
     const publicKey = readFileSync(publicKeyPath, 'utf8')
 
-    this.copy(publicKey)
+    await this.copy(publicKey)
     log.success('Key copied to clipboard')
   }
 
@@ -194,17 +194,17 @@ export default class CpPlugin extends InitxPlugin {
 
     const result = await c('gpg', ['--armor', '--export', key])
 
-    this.copy(result.content)
+    await this.copy(result.content)
     log.success('GPG public key copied to clipboard')
   }
 
   async [CpType.CWD]() {
-    this.copy(cwd())
+    await this.copy(cwd())
     log.success('Current working directory copied to clipboard')
   }
 
-  private copy(content: string) {
-    clipboard.writeSync(content)
+  private async copy(content: string) {
+    await writeText(content)
   }
 
   // #endregion cp
