@@ -60,3 +60,16 @@ export function removeRecent(key: string): void {
   store.order.splice(idx, 1)
   writeStore(store)
 }
+
+/**
+ * Replace `oldKey` with `newKey` in the recent order, preserving the position.
+ * No-op when `oldKey` is not present.
+ */
+export function renameRecent(oldKey: string, newKey: string): void {
+  const store = readStore()
+  const idx = store.order.indexOf(oldKey)
+  if (idx === -1)
+    return
+  store.order[idx] = newKey
+  writeStore(store)
+}

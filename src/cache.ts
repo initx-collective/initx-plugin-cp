@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { resolve } from 'node:path'
 
@@ -44,6 +44,29 @@ export function removeCache(encodedKey: string): void {
   if (existsSync(file)) {
     unlinkSync(file)
   }
+}
+
+/**
+ * Move a cached entry from `oldKey` to `newKey` on disk.
+ * Returns the cached entry if it existed; null if there was nothing to move.
+ */
+export function renameCache(oldKey: string, newKey: string): CacheEntry | null {
+  const oldFile = cacheFilePath(oldKey)
+  if (!existsSync(oldFile))
+    return null
+  const entry = readCache(oldKey)
+  const newFile = cacheFilePath(newKey)
+  try {
+    renameSync(oldFile, newFile)
+  }
+  catch {
+    // Fallback: copy via read+write when rename across same volume fails.
+    if (entry) {
+      writeCache(newKey, entry.content, entry.sha)
+    }
+    unlinkSync(oldFile)
+  }
+  return entry
 }
 
 export function clearAllCache(): void {

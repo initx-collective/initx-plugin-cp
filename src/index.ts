@@ -9,8 +9,8 @@ import { c, gpgList, inquirer, loadingFunction, log } from '@initx-plugin/utils'
 import clipboard from 'clipboardy'
 
 import { clearConfigValue, getConfigValue, loadConfig, setConfigValue } from './config'
-import { getDataValue, listDataKeys, removeDataValue, setDataValue } from './data'
-import { loadRecent, pushRecent, removeRecent } from './recent'
+import { getDataValue, listDataKeys, removeDataValue, renameDataValue, setDataValue } from './data'
+import { loadRecent, pushRecent, removeRecent, renameRecent } from './recent'
 import { CP_RESERVED_CONFIG_KEYS, CpConfigCommand, CpType } from './types'
 
 const PRESET_TYPES = new Set<string>(Object.values(CpType))
@@ -232,6 +232,9 @@ export default class CpPlugin extends InitxPlugin {
       case CpConfigCommand.RM:
         await this.configRm(rest[0])
         break
+      case CpConfigCommand.RENAME:
+        await this.configRename(rest)
+        break
       case CpConfigCommand.STATUS:
         this.configStatus()
         break
@@ -349,6 +352,28 @@ export default class CpPlugin extends InitxPlugin {
     }
   }
 
+  private async configRename(args: string[]) {
+    const [oldKey, newKey] = args
+    if (!oldKey || !newKey) {
+      log.error('Usage: cp-config rename <oldKey> <newKey>')
+      return
+    }
+
+    if (RESERVED_CONFIG_KEYS.has(oldKey) || RESERVED_CONFIG_KEYS.has(newKey)) {
+      log.error(`Cannot rename reserved config keys (${Array.from(RESERVED_CONFIG_KEYS).join(', ')}).`)
+      return
+    }
+
+    try {
+      await loadingFunction(`Renaming "${oldKey}" to "${newKey}"`, () => renameDataValue(oldKey, newKey))
+      renameRecent(oldKey, newKey)
+      log.success(`Data "${oldKey}" renamed to "${newKey}"`)
+    }
+    catch (err) {
+      log.error(`Failed to rename data: ${(err as Error).message}`)
+    }
+  }
+
   private configStatus() {
     const config = loadConfig()
     const redacted: Record<string, unknown> = { ...config }
@@ -426,6 +451,7 @@ export default class CpPlugin extends InitxPlugin {
       '  get <key>             Get a config or data value',
       '  list, ls              List data keys',
       '  rm <key>              Remove a config or data key',
+      '  rename <old> <new>    Rename a data key (file) without changing its value',
       '  status                Show config (token redacted)',
       '  help                  Show this help',
       '',
@@ -438,7 +464,8 @@ export default class CpPlugin extends InitxPlugin {
       '  cp-config set my-secret "hello world"',
       '  cp-config get my-secret',
       '  cp-config list',
-      '  cp-config rm my-secret'
+      '  cp-config rm my-secret',
+      '  cp-config rename my-secret renamed-secret'
     ]
     // eslint-disable-next-line no-console
     console.log(lines.join('\n'))

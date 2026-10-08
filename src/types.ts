@@ -10,6 +10,7 @@ export enum CpConfigCommand {
   LIST = 'list',
   LS = 'ls',
   RM = 'rm',
+  RENAME = 'rename',
   STATUS = 'status',
   SETUP = 'setup',
   HELP = 'help'
