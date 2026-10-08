@@ -1,0 +1,8 @@
+export { createGitHubClient } from './client'
+export { getDataValue } from './get'
+export { listDataKeys } from './list'
+export { dataPath } from './path'
+export { removeDataValue } from './remove'
+export { renameDataValue } from './rename'
+export { setDataValue } from './set'
+export { validateKey } from './validate'
