@@ -16,15 +16,19 @@ export default class CpPlugin extends InitxPlugin {
     }
   ]
 
-  async handle(ctx: InitxContext, ...args: string[]): Promise<void> {
+  async handle(ctx: InitxContext, ...args: (string | undefined)[]): Promise<void> {
+    // The initx matcher forwards a bare `undefined` when the rule is invoked with no
+    // positional args (e.g. `ix cp`). Drop those before deciding what to run.
+    const realArgs = args.filter((arg): arg is string => typeof arg === 'string')
+
     if (ctx.key === 'cp-config') {
-      await handleConfigCommand(args)
+      await handleConfigCommand(realArgs)
       return
     }
-    if (args.length === 0) {
+    if (realArgs.length === 0) {
       await runList()
       return
     }
-    await handleCopy(args)
+    await handleCopy(realArgs)
   }
 }
