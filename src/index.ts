@@ -4,7 +4,7 @@ import os from 'node:os'
 import { resolve as pathResolve } from 'node:path'
 import process, { cwd } from 'node:process'
 import { InitxPlugin } from '@initx-plugin/core'
-import { c, gpgList, inquirer, loadingFunction, log } from '@initx-plugin/utils'
+import { c, gpgList, inquirer, loadingFunction, logger } from '@initx-plugin/utils'
 
 import { writeText } from 'tinyclip'
 
@@ -45,7 +45,7 @@ export default class CpPlugin extends InitxPlugin {
   private async handleCopy(args: string[]) {
     const [key] = args
     if (!key) {
-      log.error(`Please enter the copy type. Available presets: ${Object.values(CpType).join(', ')}`)
+      logger.error(`Please enter the copy type. Available presets: ${Object.values(CpType).join(', ')}`)
       return
     }
 
@@ -60,7 +60,7 @@ export default class CpPlugin extends InitxPlugin {
   private async runPreset(cpType: CpType) {
     const handler = this[cpType]
     if (typeof handler !== 'function') {
-      log.error(`Unknown preset: ${cpType}`)
+      logger.error(`Unknown preset: ${cpType}`)
       return
     }
     await handler.call(this)
@@ -71,21 +71,21 @@ export default class CpPlugin extends InitxPlugin {
     try {
       const value = await loadingFunction(`Fetching "${key}"`, () => getDataValue(key))
       if (value === null) {
-        log.error(`Data key "${key}" not found. Use \`ix cp-config set ${key} <value>\` to create it.`)
+        logger.error(`Data key "${key}" not found. Use \`ix cp-config set ${key} <value>\` to create it.`)
         return
       }
       await this.copy(value)
-      log.success(`Data key "${key}" copied to clipboard`)
+      logger.success(`Data key "${key}" copied to clipboard`)
       pushRecent(key)
     }
     catch (err) {
-      log.error(`Failed to fetch "${key}": ${(err as Error).message}`)
+      logger.error(`Failed to fetch "${key}": ${(err as Error).message}`)
     }
   }
 
   private async runList() {
     if (!process.stdin.isTTY) {
-      log.error('cp --list requires an interactive TTY.')
+      logger.error('cp --list requires an interactive TTY.')
       return
     }
 
@@ -95,7 +95,7 @@ export default class CpPlugin extends InitxPlugin {
       dataKeys = await loadingFunction('Loading data keys', () => listDataKeys())
     }
     catch (err) {
-      log.warn(`Could not load data keys: ${(err as Error).message}`)
+      logger.warn(`Could not load data keys: ${(err as Error).message}`)
     }
 
     const available = new Set<string>([...presets, ...dataKeys])
@@ -126,7 +126,7 @@ export default class CpPlugin extends InitxPlugin {
     }
 
     if (ordered.length === 0) {
-      log.warn('No copyable keys found.')
+      logger.warn('No copyable keys found.')
       return
     }
 
@@ -147,14 +147,14 @@ export default class CpPlugin extends InitxPlugin {
     const sshDir = pathResolve(os.homedir(), '.ssh')
 
     if (!existsSync(sshDir)) {
-      log.error(`SSH directory not found, path: ${sshDir}`)
+      logger.error(`SSH directory not found, path: ${sshDir}`)
       return
     }
 
     const publicKeysName = readdirSync(sshDir).filter(file => file.endsWith('.pub'))
 
     if (publicKeysName.length === 0) {
-      log.error('SSH key not found')
+      logger.error('SSH key not found')
       return
     }
 
@@ -173,14 +173,14 @@ export default class CpPlugin extends InitxPlugin {
     const publicKey = readFileSync(publicKeyPath, 'utf8')
 
     await this.copy(publicKey)
-    log.success('Key copied to clipboard')
+    logger.success('Key copied to clipboard')
   }
 
   async [CpType.GPG]() {
     const list = await gpgList()
 
     if (list.length === 0) {
-      log.error('No GPG keys found')
+      logger.error('No GPG keys found')
       return
     }
 
@@ -195,12 +195,12 @@ export default class CpPlugin extends InitxPlugin {
     const result = await c('gpg', ['--armor', '--export', key])
 
     await this.copy(result.content)
-    log.success('GPG public key copied to clipboard')
+    logger.success('GPG public key copied to clipboard')
   }
 
   async [CpType.CWD]() {
     await this.copy(cwd())
-    log.success('Current working directory copied to clipboard')
+    logger.success('Current working directory copied to clipboard')
   }
 
   private async copy(content: string) {
@@ -242,7 +242,7 @@ export default class CpPlugin extends InitxPlugin {
         await this.configSetup()
         break
       default:
-        log.error(`Unknown command: ${command}`)
+        logger.error(`Unknown command: ${command}`)
         this.printConfigHelp()
     }
   }
@@ -250,50 +250,50 @@ export default class CpPlugin extends InitxPlugin {
   private async configSet(args: string[]) {
     const [key, ...rest] = args
     if (!key) {
-      log.error('Usage: cp-config set <key> <value>')
+      logger.error('Usage: cp-config set <key> <value>')
       return
     }
 
     if (RESERVED_CONFIG_KEYS.has(key)) {
       const value = rest.join(' ').trim()
       if (!value && key !== 'token' && key !== 'branch' && key !== 'path') {
-        log.error(`Usage: cp-config set ${key} <value>`)
+        logger.error(`Usage: cp-config set ${key} <value>`)
         return
       }
       if (key === 'token') {
-        log.warn('Token is saved in plaintext at ~/.initx/cp/config.json. Prefer a fine-grained GitHub PAT with minimal scopes.')
+        logger.warn('Token is saved in plaintext at ~/.initx/cp/config.json. Prefer a fine-grained GitHub PAT with minimal scopes.')
       }
       setConfigValue(key as 'repo' | 'token' | 'branch' | 'path', value || (key === 'branch' ? 'main' : key === 'path' ? 'data' : ''))
-      log.success(`Config "${key}" saved`)
+      logger.success(`Config "${key}" saved`)
       return
     }
 
     const value = rest.join(' ')
     if (!value) {
-      log.error('Usage: cp-config set <key> <value>')
+      logger.error('Usage: cp-config set <key> <value>')
       return
     }
 
     try {
       await loadingFunction(`Saving "${key}" to GitHub`, () => setDataValue(key, value))
-      log.success(`Data "${key}" saved`)
+      logger.success(`Data "${key}" saved`)
       pushRecent(key)
     }
     catch (err) {
-      log.error(`Failed to save data: ${(err as Error).message}`)
+      logger.error(`Failed to save data: ${(err as Error).message}`)
     }
   }
 
   private async configGet(key?: string) {
     if (!key) {
-      log.error('Usage: cp-config get <key>')
+      logger.error('Usage: cp-config get <key>')
       return
     }
 
     if (RESERVED_CONFIG_KEYS.has(key)) {
       const value = getConfigValue(key as 'repo' | 'token' | 'branch' | 'path')
       if (!value) {
-        log.warn(`Config "${key}" is not set`)
+        logger.warn(`Config "${key}" is not set`)
         return
       }
       // eslint-disable-next-line no-console
@@ -304,14 +304,14 @@ export default class CpPlugin extends InitxPlugin {
     try {
       const value = await loadingFunction(`Fetching "${key}" from GitHub`, () => getDataValue(key))
       if (value === null) {
-        log.error(`Data key "${key}" not found`)
+        logger.error(`Data key "${key}" not found`)
         return
       }
       // eslint-disable-next-line no-console
       console.log(value)
     }
     catch (err) {
-      log.error(`Failed to get data: ${(err as Error).message}`)
+      logger.error(`Failed to get data: ${(err as Error).message}`)
     }
   }
 
@@ -319,58 +319,58 @@ export default class CpPlugin extends InitxPlugin {
     try {
       const keys = await loadingFunction('Listing data keys', () => listDataKeys())
       if (keys.length === 0) {
-        log.info('No data keys configured')
+        logger.info('No data keys configured')
         return
       }
       // eslint-disable-next-line no-console
       console.log(keys.join('\n'))
     }
     catch (err) {
-      log.error(`Failed to list data: ${(err as Error).message}`)
+      logger.error(`Failed to list data: ${(err as Error).message}`)
     }
   }
 
   private async configRm(key?: string) {
     if (!key) {
-      log.error('Usage: cp-config rm <key>')
+      logger.error('Usage: cp-config rm <key>')
       return
     }
 
     if (RESERVED_CONFIG_KEYS.has(key)) {
       clearConfigValue(key as 'repo' | 'token' | 'branch' | 'path')
-      log.success(`Config "${key}" removed`)
+      logger.success(`Config "${key}" removed`)
       return
     }
 
     try {
       await loadingFunction(`Removing "${key}" from GitHub`, () => removeDataValue(key))
-      log.success(`Data "${key}" removed`)
+      logger.success(`Data "${key}" removed`)
       removeRecent(key)
     }
     catch (err) {
-      log.error(`Failed to remove data: ${(err as Error).message}`)
+      logger.error(`Failed to remove data: ${(err as Error).message}`)
     }
   }
 
   private async configRename(args: string[]) {
     const [oldKey, newKey] = args
     if (!oldKey || !newKey) {
-      log.error('Usage: cp-config rename <oldKey> <newKey>')
+      logger.error('Usage: cp-config rename <oldKey> <newKey>')
       return
     }
 
     if (RESERVED_CONFIG_KEYS.has(oldKey) || RESERVED_CONFIG_KEYS.has(newKey)) {
-      log.error(`Cannot rename reserved config keys (${Array.from(RESERVED_CONFIG_KEYS).join(', ')}).`)
+      logger.error(`Cannot rename reserved config keys (${Array.from(RESERVED_CONFIG_KEYS).join(', ')}).`)
       return
     }
 
     try {
       await loadingFunction(`Renaming "${oldKey}" to "${newKey}"`, () => renameDataValue(oldKey, newKey))
       renameRecent(oldKey, newKey)
-      log.success(`Data "${oldKey}" renamed to "${newKey}"`)
+      logger.success(`Data "${oldKey}" renamed to "${newKey}"`)
     }
     catch (err) {
-      log.error(`Failed to rename data: ${(err as Error).message}`)
+      logger.error(`Failed to rename data: ${(err as Error).message}`)
     }
   }
 
@@ -386,12 +386,12 @@ export default class CpPlugin extends InitxPlugin {
 
   private async configSetup() {
     if (!process.stdin.isTTY) {
-      log.error('cp-config setup requires an interactive TTY. Use `cp-config set <key> <value>` instead.')
+      logger.error('cp-config setup requires an interactive TTY. Use `cp-config set <key> <value>` instead.')
       return
     }
 
     const current = loadConfig()
-    log.info('cp-config setup — press Enter to keep the current value, type to overwrite.')
+    logger.info('cp-config setup — press Enter to keep the current value, type to overwrite.')
 
     try {
       const repoMsg = current.repo
@@ -404,40 +404,40 @@ export default class CpPlugin extends InitxPlugin {
         patternError: 'Repo must be in the form "owner/repo".'
       })
       setConfigValue('repo', repo)
-      log.success(`Config "repo" saved`)
+      logger.success(`Config "repo" saved`)
 
       const tokenMsg = current.token
         ? 'GitHub PAT (Enter to keep current value, or paste a new token)'
         : 'GitHub PAT'
       const token = await inquirer.password(tokenMsg, { mask: '*' })
       if (token && token !== current.token) {
-        log.warn('Token is saved in plaintext at ~/.initx/cp/config.json. Prefer a fine-grained GitHub PAT with minimal scopes.')
+        logger.warn('Token is saved in plaintext at ~/.initx/cp/config.json. Prefer a fine-grained GitHub PAT with minimal scopes.')
         setConfigValue('token', token)
-        log.success(`Config "token" saved`)
+        logger.success(`Config "token" saved`)
       }
       else if (!token && current.token) {
-        log.info('Token unchanged.')
+        logger.info('Token unchanged.')
       }
       else if (!token && !current.token) {
-        log.warn('Token not set. You can set it later via `cp-config set token <value>`.')
+        logger.warn('Token not set. You can set it later via `cp-config set token <value>`.')
       }
 
       const branchMsg = current.branch ? `Branch (current: ${current.branch})` : 'Branch'
       const branch = await inquirer.input(branchMsg, { default: current.branch || 'main' })
       setConfigValue('branch', branch || 'main')
-      log.success(`Config "branch" saved`)
+      logger.success(`Config "branch" saved`)
 
       const pathMsg = current.path ? `Path inside repo (current: ${current.path})` : 'Path inside repo'
       const dataPath = await inquirer.input(pathMsg, { default: current.path || 'data' })
       setConfigValue('path', dataPath || 'data')
-      log.success(`Config "path" saved`)
+      logger.success(`Config "path" saved`)
 
       // eslint-disable-next-line no-console
       console.log('\nCurrent config:')
       this.configStatus()
     }
     catch (err) {
-      log.warn(`Setup cancelled. ${(err as Error).message || ''} Existing config left untouched.`)
+      logger.warn(`Setup cancelled. ${(err as Error).message || ''} Existing config left untouched.`)
     }
   }
 
