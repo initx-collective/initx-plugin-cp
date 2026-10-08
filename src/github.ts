@@ -6,7 +6,8 @@ export interface GitHubFile {
   sha: string
   size: number
   content: string
-  encoding: string
+  encoding: BufferEncoding
+  type: 'file' | 'dir' | 'symlink' | 'submodule'
 }
 
 export interface GitHubDirEntry {
