@@ -36,7 +36,7 @@ export async function handleCopy(args: string[]): Promise<void> {
 
 export async function runList(): Promise<void> {
   if (!process.stdin.isTTY) {
-    logger.error('cp --list requires an interactive TTY.')
+    logger.error('cp (interactive picker) requires an interactive TTY.')
     return
   }
 

@@ -8,7 +8,7 @@ export default class CpPlugin extends InitxPlugin {
   rules: InitxMatcherRules = [
     {
       matching: 'cp',
-      description: 'Copy SSH / GPG / CWD / data key to clipboard'
+      description: 'Copy SSH / GPG / CWD / data key to clipboard (interactive picker when no key given)'
     },
     {
       matching: 'cp-config',
@@ -17,12 +17,12 @@ export default class CpPlugin extends InitxPlugin {
   ]
 
   async handle(ctx: InitxContext, ...args: string[]): Promise<void> {
-    if (ctx.optionsList.includes('--list')) {
-      await runList()
-      return
-    }
     if (ctx.key === 'cp-config') {
       await handleConfigCommand(args)
+      return
+    }
+    if (args.length === 0) {
+      await runList()
       return
     }
     await handleCopy(args)

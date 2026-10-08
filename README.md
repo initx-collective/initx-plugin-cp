@@ -22,6 +22,8 @@ npx initx cp ssh    # SSH public key (picks from .ssh/ or interactively)
 npx initx cp gpg    # GPG public key
 ```
 
+Running `npx initx cp` with no key opens an interactive picker over presets and any configured data keys (most-recently-used first), so you can fuzzy-search and copy without typing the key name.
+
 ### GitHub-backed data store
 
 Point `cp` at a private GitHub repo and a personal access token, then store named snippets as files. Any `cp <key>` that is not a built-in preset will look up the file from the repo and copy it to your clipboard. Files are cached locally under `~/.initx/cp/cache/`.
